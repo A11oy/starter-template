@@ -1,5 +1,4 @@
 import appendRawHtmlToHead from './appendRawHtmlToHead'
-import get from 'lodash/get'
 
 declare const Redux: any
 
