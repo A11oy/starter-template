@@ -7,7 +7,7 @@ const loadElement = (doc: Document, selector: string) => {
   if (element) {
     const parsedData = doc.querySelector(selector)
     if (parsedData) {
-      console.log("Lateloaded", selector)
+      console.log("Lateloaded", selector, parsedData.innerHTML)
       element.innerHTML = parsedData.innerHTML
     }
   }

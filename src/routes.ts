@@ -16,7 +16,11 @@ layer0Router
   })
 
 // no cache routes
-layer0Router
+  .match({
+    headers: {
+      lateload: /true/
+    },
+  }, ({ proxy }) => proxy('origin'))
   .match('/no-cache-proxy/:anypath*', (response) => noCacheRouteHandler(response, '/:anypath*'))
 
 // other Edgio rotes

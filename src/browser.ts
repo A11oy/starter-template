@@ -1,19 +1,17 @@
-import installDevtools from '@edgio/devtools/install'
+// import installDevtools from '@edgio/devtools/install'
 import loadPersonalizedHTML from './utils/browser/loadPersonalizedHTML'
-import loadScriptsWithPersonalizedData from './utils/browser/loadScriptsWithPersonalizedData'
+// import loadScriptsWithPersonalizedData from './utils/browser/loadScriptsWithPersonalizedData'
 
 /** START Late loading **/
-let redirectCount = 0;
-const REDIRECT_LIMIT = 10;
 
 const fetchUrl = async (urlObject: URL | Location): Promise<Response> => {
   const url = `${urlObject.pathname}${urlObject.search || ''}`
-  const noCacheUrl = `/no-cache-proxy${url}`
-  const response = await fetch(noCacheUrl,
-    // {
-    // credentials: 'include',
-    // redirect: 'follow',
-    // }
+  const response = await fetch(url,
+    {
+      headers: {
+        lateload: 'true'
+      }
+    }
   )
   return response
 }
@@ -32,8 +30,16 @@ const main = async () => {
     const pageDoc = domParser.parseFromString(pageData, 'text/html')
 
     // find personalized data and inject it to current page
-    loadScriptsWithPersonalizedData(pageDoc)
+    // loadScriptsWithPersonalizedData(pageDoc)
     loadPersonalizedHTML(pageDoc)
+    const customJsScriptParsed = pageDoc.querySelector('script[src*="/js/custom.js"]')
+    // console.log('load custom js', customJsScriptParsed)
+    if (customJsScriptParsed) {
+      const customJsScript = document.createElement('script')
+      customJsScript.type = 'text/javascript'
+      customJsScript.src = customJsScriptParsed.getAttribute('src') || ''
+      document.body.append(customJsScript)
+    }
   }
 }
 
