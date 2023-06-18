@@ -16,6 +16,7 @@ export default function transform(response: Response, request: Request) {
     // remove personalized data from page
     removeScriptsWithPersonalizedData($)
     removePersonalizedHTML($)
+    $('meta[http-equiv="Content-Security-Policy"]').remove()
 
     let responseHTML = $.html()
 

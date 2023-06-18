@@ -8,6 +8,10 @@ const handler: RouteHandler = async (response: ResponseWriter) => {
   const { cache, proxy, removeUpstreamResponseHeader } = response
   cache(CACHE_PAGES)
   removeUpstreamResponseHeader(HTTP_HEADERS.setCookie);
+  removeUpstreamResponseHeader('content-security-policy')
+  removeUpstreamResponseHeader('content-security-policy-report-only')
+  removeUpstreamResponseHeader('strict-transport-security')
+  removeUpstreamResponseHeader('pragma')
   updateLocationResponseHeader(response, /https?:\/\/(www\.)?(petsmart)\.com\//gi)
   proxy('origin', { transformResponse: transform })
 }
